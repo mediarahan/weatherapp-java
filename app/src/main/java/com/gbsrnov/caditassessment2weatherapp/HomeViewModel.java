@@ -2,6 +2,7 @@ package com.gbsrnov.caditassessment2weatherapp;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -11,7 +12,6 @@ import com.gbsrnov.caditassessment2weatherapp.model.daily.DailyWeatherResponse;
 import com.gbsrnov.caditassessment2weatherapp.model.hourly.TodayWeatherResponse;
 import com.gbsrnov.caditassessment2weatherapp.remote.ApiConfig;
 import com.gbsrnov.caditassessment2weatherapp.model.hourly.ResponseItem;
-import com.levitnudi.legacytableview.LegacyTableView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,36 +25,33 @@ public class HomeViewModel extends ViewModel {
     private static final String TAG = "HomeViewModel";
 
     private final MutableLiveData<ResponseItem> _weatherData = new MutableLiveData<>();
-
     public LiveData<ResponseItem> getWeatherData() {
         return _weatherData;
     }
 
     private final MutableLiveData<List<ResponseItem>> _hourlyWeatherData = new MutableLiveData<>();
-
     public LiveData<List<ResponseItem>> getHourlyWeatherData() {
         return _hourlyWeatherData;
     }
 
     private final MutableLiveData<List<DailyForecastsItem>> _dailyWeatherData = new MutableLiveData<>();
-
     public LiveData<List<DailyForecastsItem>> getDailyWeatherData() {
         return _dailyWeatherData;
     }
-    private final MutableLiveData<Boolean> _isLoading = new MutableLiveData<>();
 
+    private final MutableLiveData<Boolean> _isLoading = new MutableLiveData<>();
     public LiveData<Boolean> getIsLoading() {
         return _isLoading;
     }
 
-    public void fetchcurrentWeatherData() {
+    public void fetchCurrentWeatherData() {
         _isLoading.setValue(true);
         final Call<List<TodayWeatherResponse>> client =
                 ApiConfig.getApiService().getCurrentWeatherData("208977", true);
 
-        client.enqueue(new Callback<List<TodayWeatherResponse>>() {
+        client.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<List<TodayWeatherResponse>> call, Response<List<TodayWeatherResponse>> response) {
+            public void onResponse(@NonNull Call<List<TodayWeatherResponse>> call, @NonNull Response<List<TodayWeatherResponse>> response) {
                 _isLoading.setValue(false);
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     TodayWeatherResponse weatherResponse = response.body().get(0); // Extract first object
@@ -65,7 +62,7 @@ public class HomeViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<List<TodayWeatherResponse>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<TodayWeatherResponse>> call, @NonNull Throwable t) {
                 _isLoading.setValue(false);
                 Log.e(TAG, "API call failed: " + t.getMessage(), t);
             }
@@ -78,9 +75,9 @@ public class HomeViewModel extends ViewModel {
         final Call<List<TodayWeatherResponse>> client =
                 ApiConfig.getApiService().getHourlyWeatherData("208977", true);
 
-        client.enqueue(new Callback<List<TodayWeatherResponse>>() {
+        client.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<List<TodayWeatherResponse>> call, Response<List<TodayWeatherResponse>> response) {
+            public void onResponse(@NonNull Call<List<TodayWeatherResponse>> call, @NonNull Response<List<TodayWeatherResponse>> response) {
                 _isLoading.setValue(false);
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     List<ResponseItem> responseItems = new ArrayList<>();
@@ -94,7 +91,7 @@ public class HomeViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<List<TodayWeatherResponse>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<TodayWeatherResponse>> call, @NonNull Throwable t) {
                 _isLoading.setValue(false);
                 Log.e(TAG, "Hourly API call failed: " + t.getMessage(), t);
             }
@@ -107,9 +104,9 @@ public class HomeViewModel extends ViewModel {
         final Call<DailyWeatherResponse> client =
                 ApiConfig.getApiService().getDailyWeatherData("208977", true, true);
 
-        client.enqueue(new Callback<DailyWeatherResponse>() {
+        client.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<DailyWeatherResponse> call, Response<DailyWeatherResponse> response) {
+            public void onResponse(@NonNull Call<DailyWeatherResponse> call, @NonNull Response<DailyWeatherResponse> response) {
                 _isLoading.setValue(false);
                 if (response.isSuccessful() && response.body() != null) {
                     List<DailyForecastsItem> dailyForecasts = response.body().getDailyForecasts();
@@ -124,7 +121,7 @@ public class HomeViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<DailyWeatherResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<DailyWeatherResponse> call, @NonNull Throwable t) {
                 _isLoading.setValue(false);
                 Log.e(TAG, "Daily API call failed: " + t.getMessage(), t);
             }

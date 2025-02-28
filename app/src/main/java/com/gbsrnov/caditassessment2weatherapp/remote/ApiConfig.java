@@ -41,6 +41,12 @@ public class ApiConfig {
             @NonNull
             @Override
             public Response intercept(@NonNull Chain chain) throws IOException {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 Request request = chain.request();
                 Request requestWithAuth = request.newBuilder()
                         .url(request.url().newBuilder().addQueryParameter("apikey", BuildConfig.API_KEY).build())
@@ -48,6 +54,7 @@ public class ApiConfig {
                 return chain.proceed(requestWithAuth);
             }
         };
+
 
         final OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)

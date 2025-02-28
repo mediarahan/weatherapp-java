@@ -7,7 +7,7 @@ public class Speed {
 	private int unitType;
 
 	@SerializedName("Value")
-	private float value; // ✅ FIXED: Changed from Object to float
+	private float value;
 
 	@SerializedName("Unit")
 	private String unit;
@@ -16,7 +16,7 @@ public class Speed {
 		return unitType;
 	}
 
-	public float getValue(){ // ✅ NOW RETURNS FLOAT
+	public float getValue(){
 		return value;
 	}
 

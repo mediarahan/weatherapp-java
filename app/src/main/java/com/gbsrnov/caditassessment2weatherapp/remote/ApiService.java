@@ -34,6 +34,3 @@ public interface ApiService {
 
 
 }
-
-//key Qzf5OndsbgiC3MCE5hivnYHjK3bvdfji
-//city code 208977
